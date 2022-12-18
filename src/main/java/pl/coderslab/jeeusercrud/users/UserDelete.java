@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/delete")
+@WebServlet("/users/delete")
 public class UserDelete extends HttpServlet {
 
     @Override
@@ -22,6 +22,6 @@ public class UserDelete extends HttpServlet {
             int userId = Integer.parseInt(id);
             UserDao.delete(userId);
         }
-        resp.sendRedirect("/list");
+        resp.sendRedirect("/users/list");
     }
 }

@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="chart-area">
 
-                <form action="/edit" method="post">
+                <form action="/users/edit" method="post">
                     <div class="form-group">
                         <label for="userid">User ID</label>
                         <input type="number" class="form-control" name="id" id="userid" aria-describedby="username" value="${user.getUserId()}" readonly/>

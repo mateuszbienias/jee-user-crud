@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="chart-area">
 
-                <form action="/add" method="post">
+                <form action="/users/add" method="post">
                     <div class="form-group">
                         <label for="username1">User Name</label>
                         <input type="text" class="form-control" name="username" id="username1" aria-describedby="username">
