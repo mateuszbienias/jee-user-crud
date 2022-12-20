@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @WebServlet("/users/edit")
 public class UserEdit extends HttpServlet {
@@ -17,7 +18,7 @@ public class UserEdit extends HttpServlet {
 
         String id = req.getParameter("id");
 
-        if (!id.isEmpty()) {
+        if (Objects.nonNull(id)) {
             int userId = Integer.parseInt(id);
             User user = UserDao.read(userId);
             req.setAttribute("user", user);
@@ -32,25 +33,35 @@ public class UserEdit extends HttpServlet {
         String username = req.getParameter("username");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
+        User user = UserDao.read(Integer.parseInt(id));
+        req.setAttribute("user", user);
 
-        User user = new User();
-        if (!id.isEmpty()) {
-            user.setUserId(Integer.parseInt(id));
+        if (Objects.nonNull(id)) {
+            if (!username.equals(user.getUserName()) || !email.equals(email)) {
+                if (UserDao.checkUserName(username) || UserDao.checkEmail(email)) {
+                    if (!username.equals(user.getUserName()) && !email.equals(user.getEmail())) {
+                        req.setAttribute("errorName", username + " login is already taken !!!");
+                        req.setAttribute("errorEmail", email + "Email is already taken !!!");
+                        req.setAttribute("user", user);
+                        getServletContext().getRequestDispatcher("/users/edit.jsp").forward(req, resp);
+                    } else if (UserDao.checkUserName(username)) {
+                        req.setAttribute("errorName", username + " login is already taken !!!");
+                        getServletContext().getRequestDispatcher("/users/edit.jsp").forward(req, resp);
+                    } else {
+                        if (!email.equals(user.getEmail())) {
+                            req.setAttribute("errorEmail", email + " Email is already taken !!!");
+                            getServletContext().getRequestDispatcher("/users/edit.jsp").forward(req, resp);
+                        }
+                    }
+                }
+            } else {
+                user.setUserName(username);
+                user.setEmail(email);
+                user.setPassword(password);
+                UserDao.update(user);
+                //jak to jest zrobione w coderslab
+                resp.sendRedirect("/users/list");
+            }
         }
-        if (!username.isEmpty()) {
-            user.setUserName(username);
-        }
-        if (!username.isEmpty()) {
-            user.setEmail(email);
-        }
-        if (!username.isEmpty()) {
-            user.setPassword(password);
-        }
-        UserDao.update(user);
-
-        //jak to jest zrobione w coderslab
-
-        resp.sendRedirect("/list");
-
     }
 }

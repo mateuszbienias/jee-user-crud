@@ -4,8 +4,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.jeeusercrud.model.User;
 import pl.coderslab.jeeusercrud.utils.DbUtil;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserDao {
 
@@ -16,6 +19,8 @@ public class UserDao {
     private static final String DELETE_USER_QUERY = "delete from users where id = ?";
 
     private static final String READ_ALL_USERS = "select * from users";
+    private static final String CHECK_USERNAME = "SELECT username from users where username = ?";
+    private static final String CHECK_EMAIL = "SELECT email from users where email = ?";
 
     public static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -133,4 +138,56 @@ public class UserDao {
     }
 
 
+    public static boolean checkUserName(String userName) {
+
+        try (Connection connection = DbUtil.getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement(CHECK_USERNAME);
+            statement.setString(1, userName);
+            String username = "";
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                username = resultSet.getString("username");
+            }
+            return username.equals(userName);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean checkEmail(String email) {
+
+        try (Connection connection = DbUtil.getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement(CHECK_EMAIL);
+            statement.setString(1, email);
+            String em = "";
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                em = resultSet.getString("email");
+            }
+            return em.equals(email);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean verifyEmail(String email){
+        return email.matches("[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.([a-zA-Z]{2,}){1}");
+    }
+
+    public static boolean verifyPasswordStrength (String password) {
+        String passwordReg = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+        Pattern compilePattern = Pattern.compile(passwordReg);
+        Matcher matcher = compilePattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public static boolean verifyUserName(String userName) {
+        return userName.matches("[a-z0-9_-]{3,16}");
+    }
 }

@@ -26,10 +26,12 @@
                     <div class="form-group">
                         <label for="username1">User Name</label>
                         <input type="text" class="form-control" name="username" id="username1" aria-describedby="username" value="${user.getUserName()}">
+                        <span style="color: red">${empty errorName ? "" : errorName}</span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" value="${user.getEmail()}">
+                        <span style="color: red">${empty errorEmail ? "" : errorEmail}</span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>

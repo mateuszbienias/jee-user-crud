@@ -20,16 +20,19 @@
                 <form action="/users/add" method="post">
                     <div class="form-group">
                         <label for="username1">User Name</label>
-                        <input type="text" class="form-control" name="username" id="username1" aria-describedby="username">
+                        <input type="text" class="form-control" name="username" id="username1" aria-describedby="username" value="${empty userName ? "" : userName}"/>
+                        <span style="color: red">${empty errorName ? "" : errorName}</span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" value="${empty email ? "" : email}"/>
+                        <span style="color: red">${empty errorEmail ? "" : errorEmail}</span>
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                        <input type="password" class="form-control" name="password" id="exampleInputPassword1" value="${empty email ? "" : email}"/>
+                        <span style="color: red">${empty errorPassword ? "" : errorPassword}</span>
                     </div>
                     <button type="submit" class="btn btn-primary">Add user</button>
                 </form>
