@@ -24,7 +24,9 @@ public class UserAdd extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        UserDao.read(email);
+        req.setAttribute("userName", username);
+        req.setAttribute("email", email);
+        req.setAttribute("password", password);
 
         User user = new User();
         if (Objects.nonNull(username) && Objects.nonNull(email) && Objects.nonNull(password)) {
@@ -32,21 +34,12 @@ public class UserAdd extends HttpServlet {
                 if (UserDao.checkUserName(username) && UserDao.checkEmail(email)) {
                     req.setAttribute("errorName", "login is already taken !!!");
                     req.setAttribute("errorEmail", "Email is already taken !!!");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (UserDao.checkUserName(username)) {
                     req.setAttribute("errorName", "login is already taken !!!");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else {
                     req.setAttribute("errorEmail", "Email is already taken !!!");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 }
 
@@ -61,41 +54,23 @@ public class UserAdd extends HttpServlet {
                     req.setAttribute("errorName", "Login must be min 3 max 16 characters, and only number and letters !!!");
                     req.setAttribute("errorEmail", "This is not an email !!!");
                     req.setAttribute("errorPassword", "Wrong Password!!! Must be min 10 max 15 characters and min 1 special characters");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (!UserDao.verifyUserName(username) && !UserDao.verifyPasswordStrength(password)) {
                     req.setAttribute("errorName", "Login must be min 3 max 16 characters, and only number and letters !!!");
                     req.setAttribute("errorPassword", "Wrong Password!!! Must be min 10 max 15 characters and min 1 special characters");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (!UserDao.verifyEmail(email) && !UserDao.verifyPasswordStrength(password)) {
                     req.setAttribute("errorEmail", "This is not an email !!!");
                     req.setAttribute("errorPassword", "Wrong Password!!! Must be min 10 max 15 characters and min 1 special characters");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (!UserDao.verifyEmail(email)) {
                     req.setAttribute("errorEmail", "This is not an email !!!");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (!UserDao.verifyUserName(username)) {
                     req.setAttribute("errorName", "Login must be min 3 max 16 characters, and only number and letters !!!");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else if (!UserDao.verifyPasswordStrength(password)) {
                     req.setAttribute("errorPassword", "Wrong Password!!! Must be min 8 max 15 characters and min 1 special characters, and only number and letters.");
-                    req.setAttribute("userName", username);
-                    req.setAttribute("email", email);
-                    req.setAttribute("password", password);
                     getServletContext().getRequestDispatcher("/users/add.jsp").forward(req,resp);
                 } else {
                     user.setUserName(username);
@@ -108,7 +83,6 @@ public class UserAdd extends HttpServlet {
             }
         }
         //jak to jest zrobione w coderslab
-
 
     }
 }
